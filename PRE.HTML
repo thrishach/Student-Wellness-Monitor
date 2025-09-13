@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Wellness Monitor</title>
+
+  <!-- Two handwriting fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Shadows+Into+Light&display=swap" rel="stylesheet">
+
+  <style>
+    body { 
+      font-family: 'Patrick Hand', cursive; 
+      font-style: italic;
+      text-align:center; 
+      transition:1s; 
+      font-size: 20px;
+      background-image: url("young-woman-doing-yoga-exercises-lake-beach-sunset_132024-1561.jpg");
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      color: red;
+    }
+    h2, h3 {
+      font-family: 'Shadows Into Light', cursive;
+      font-style: normal;
+      font-size: 30px;
+      font-family: 'Shadows Into Light', cursive;
+      font-style: normal;
+      font-size: 28px;
+    }
+    @keyframes bounce {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.5); }
+      100% { transform: scale(1); }
+    }
+    .animate { animation: bounce 0.8s ease; }
+
+    /* Score bar */
+    #scoreBar {
+      width: 0%;
+      height: 20px;
+      background: limegreen;
+      margin: 10px auto;
+      border-radius: 10px;
+      transition: width 2s;
+    }
+  </style>
+</head>
+<body id="body">
+  <div id="celebration" style="position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; overflow:hidden;"></div>
+
+  <button onclick="toggleDark()" style="position:absolute; top:10px; right:10px;">🌙</button>
+
+  <h2>🧑‍🎓 Student Wellness Check</h2>
+
+  <div id="emojiDisplay" style="font-size:60px;">🙂</div>
+
+  <label>Your Name</label><br>
+  <input type="text" id="name"><br><br>
+
+  <label>Mood</label><br>
+  <select id="mood" onchange="updateMood()">
+    <option value="happy">😊 Happy</option>
+    <option value="okay">🙂 Okay</option>
+    <option value="stressed">😟 Stressed</option>
+    <option value="sad">😢 Sad</option>
+  </select><br><br>
+
+  <label>Sleep Hours</label><br>
+  <input type="number" id="sleep"><br><br>
+
+  <label>Stress Level (1-10)</label><br>
+  <input type="number" id="stress"><br><br>
+
+  <label>Exercise Minutes</label><br>
+  <input type="number" id="exercise"><br><br>
+
+  <button onclick="calculateWellness()">Check Wellness</button>
+
+  <div id="output"></div>
+  <div id="scoreBar"></div>
+
+  <h3>🏆 Class Leaderboard</h3>
+  <ul id="leaderboard"></ul>
+
+  <script>
+    function toggleDark() {
+      let body = document.getElementById("body");
+      if (body.style.background === "black") {
+        body.style.background = "white";
+        body.style.color = "black";
+      } else {
+        body.style.background = "black";
+        body.style.color = "white";
+      }
+    }
+
+    function updateMood() {
+      let mood = document.getElementById("mood").value;
+      let emoji = "🙂";
+      if (mood === "happy") emoji = "😊";
+      else if (mood === "okay") emoji = "🙂";
+      else if (mood === "stressed") emoji = "😟";
+      else if (mood === "sad") emoji = "😢";
+
+      let emojiDiv = document.getElementById("emojiDisplay");
+      emojiDiv.innerText = emoji;
+
+      emojiDiv.classList.remove("animate");
+      void emojiDiv.offsetWidth; 
+      emojiDiv.classList.add("animate");
+    }
+
+    function calculateWellness() {
+      let name = document.getElementById("name").value || "Student";
+      let sleep = parseInt(document.getElementById("sleep").value) || 0;
+      let stress = parseInt(document.getElementById("stress").value) || 0;
+      let exercise = parseInt(document.getElementById("exercise").value) || 0;
+      let mood = document.getElementById("mood").value;
+
+      let score = 0;
+      if (sleep >= 7 && sleep <= 9) score += 25; else if (sleep >= 5) score += 15; else score += 5;
+      if (stress <= 4) score += 25; else if (stress <= 7) score += 15; else score += 5;
+      if (exercise >= 30) score += 25; else if (exercise >= 10) score += 15; else score += 5;
+      if (mood === "happy") score += 25; else if (mood === "okay") score += 15; else if (mood === "stressed") score += 10; else score += 5;
+
+      let feedback = "";
+      if (score >= 80) feedback = "✅ Excellent wellness! Keep it up 🎉";
+      else if (score >= 60) feedback = "🙂 Good wellness, but try to improve!";
+      else if (score >= 40) feedback = "⚠️ Moderate wellness. Balance your routine.";
+      else feedback = "❌ Low wellness! Please take care 💡";
+
+      // Gradient Background
+      if (score < 40) document.getElementById("body").style.background = "linear-gradient(to right, red, orange)";
+      else if (score < 70) document.getElementById("body").style.background = "linear-gradient(to right, yellow, gold)";
+      else document.getElementById("body").style.background = "linear-gradient(to right, lightgreen, lightblue)";
+
+      document.getElementById("output").innerHTML = "<h3>👋 Hi, " + name + "!</h3>" +
+        "<p>⭐ Wellness Score: " + score + "/100</p>" +
+        "<p>" + feedback + "</p>";
+
+      let bar = document.getElementById("scoreBar");
+      bar.style.width = "0%";
+      setTimeout(() => { bar.style.width = score + "%"; }, 100);
+    }
+
+    updateMood();
+  </script>
+</body>
+</html>
