@@ -41,7 +41,7 @@ Optional Enhancements
 Leaderboard to track student wellness
 Dark mode toggle for accessibility
 7. Technology Stack
-HTML/CSS/JavaScript: Frontend, interactive UI, animations
+HTML: Frontend, interactive UI, animations
 Google Fonts: Playful handwriting fonts for UX
 AI Concept: Rule-based wellness scoring system simulating an AI coach
 8. Workflow / Algorithm
